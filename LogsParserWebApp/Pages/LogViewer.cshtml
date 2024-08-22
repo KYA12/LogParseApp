@@ -1,0 +1,32 @@
+﻿@page
+@model LogSearchApp.Pages.LogViewerModel
+@{
+    ViewData["Title"] = "Log Viewer";
+}
+
+<h2>Log Viewer</h2>
+
+@if (Model.FileContent != null)
+{
+    <h3>Viewing: @Model.FilePath</h3>
+    <pre>
+        @Html.Raw(Model.HighlightedContent)
+    </pre>
+}
+else
+{
+    <p>File not found or could not be read.</p>
+}
+
+<hr />
+<p><a href="/">Back to Search Page</a></p>
+
+<style>
+    .highlight {
+        background-color: #add8e6;
+        display: block; 
+        margin: 0; 
+        padding: 0;
+        white-space: pre-wrap;
+    }
+</style>

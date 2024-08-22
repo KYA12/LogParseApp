@@ -1,0 +1,51 @@
+﻿@page
+@model LogSearchApp.Pages.SearchModel
+@{
+    ViewData["Title"] = "Search Logs";
+}
+
+<h2>Search Logs</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="searchPattern">Search Pattern</label>
+        <input type="text" class="form-control @(Model.HasError ? "is-invalid" : "")" id="searchPattern" name="SearchPattern" value="@Model.SearchPattern"
+               onfocus="this.classList.remove('is-invalid')" />
+        @if (Model.HasError)
+        {
+            <div class="invalid-feedback">
+                @Model.ErrorMessage
+            </div>
+        }
+    </div>
+    <button type="submit" class="btn btn-primary mt-3 mb-3">Search</button>
+</form>
+
+@if (!string.IsNullOrEmpty(Model.RegexPattern))
+{
+    <div class="alert alert-info mt-3">
+        <strong>Regex Pattern Used:</strong> @Model.RegexPattern
+    </div>
+}
+
+@if (Model.MatchedLines != null && Model.MatchedLines.Any())
+{
+    <h3>Results:</h3>
+    <ul>
+        @foreach (var match in Model.MatchedLines)
+        {
+            <li>
+                <a href="/LogViewer?filePath=@Uri.EscapeDataString(match.FilePath)&lineNumber=@match.LineNumber&regexPattern=@Uri.EscapeDataString(@Model.RegexPattern)">
+                    @match.FilePath - Line @match.LineNumber
+                </a>: @match.Line
+            </li>
+        }
+    </ul>
+}
+else if (Model.MatchedLines != null)
+{
+    <p>No matches found.</p>
+}
+
+<hr />
+<p><a href="/">Back to Search Page</a></p>
